@@ -1,4 +1,6 @@
 #!/usr/bin/make -f
+export PYBUILD_NAME=sphinx-notfound-page
+export PYBUILD_AFTER_TEST=rm -rf '{build_dir}/build'
 
 %:
-	dh $@
+	dh $@ --buildsystem=pybuild

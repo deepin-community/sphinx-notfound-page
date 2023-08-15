@@ -1,5 +1,29 @@
-template-repository (1.0-1) unstable; urgency=medium
+sphinx-notfound-page (0.8.3-2) unstable; urgency=medium
 
-  * Initial release
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository, Repository-Browse.
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Jelmer Vernooĳ <jelmer@debian.org>  Mon, 17 Oct 2022 03:33:12 +0100
+
+sphinx-notfound-page (0.8.3-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream version 0.8.3
+  * Bump Standards-Version to 4.6.1
+  * Switch to PEP 517 build
+
+ -- Timo Röhling <roehling@debian.org>  Wed, 27 Jul 2022 01:32:29 +0200
+
+sphinx-notfound-page (0.8-2) unstable; urgency=medium
+
+  * Team upload.
+  * Run pytest test suite on build
+  * Migrate to dh-sequence-python3
+
+ -- Timo Röhling <roehling@debian.org>  Sun, 19 Jun 2022 23:26:51 +0200
+
+sphinx-notfound-page (0.8-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #1003341)
+
+ -- Mo Zhou <lumin@debian.org>  Sat, 08 Jan 2022 12:26:03 -0500
