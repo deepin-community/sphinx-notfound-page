@@ -1,3 +1,19 @@
+sphinx-notfound-page (1.0.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Add a patch to make the tests pass with our Alabaster version.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Mon, 30 Oct 2023 10:11:04 +0300
+
+sphinx-notfound-page (0.8.3-3) unstable; urgency=medium
+
+  * Override dh_auto_test to fix FTBFS due to test failure.
+    (Closes: #1042604, #1052853)
+  * Add autopkgtest test case.
+
+ -- Mo Zhou <lumin@debian.org>  Fri, 06 Oct 2023 17:50:16 -0400
+
 sphinx-notfound-page (0.8.3-2) unstable; urgency=medium
 
   [ Debian Janitor ]

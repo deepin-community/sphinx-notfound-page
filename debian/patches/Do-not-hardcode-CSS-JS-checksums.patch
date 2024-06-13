@@ -1,0 +1,158 @@
+From: Dmitry Shachnev <mitya57@debian.org>
+Date: Mon, 30 Oct 2023 10:54:31 +0300
+Subject: Do not hardcode CSS/JS checksums
+
+This makes the tests work with Debian's alabaster version.
+
+Forwarded: https://github.com/readthedocs/sphinx-notfound-page/pull/226
+---
+ tests/test_urls.py | 32 ++++++++++++++++----------------
+ tests/utils.py     | 19 ++++++-------------
+ 2 files changed, 22 insertions(+), 29 deletions(-)
+
+diff --git a/tests/test_urls.py b/tests/test_urls.py
+index 03774c1..beb93e8 100644
+--- a/tests/test_urls.py
++++ b/tests/test_urls.py
+@@ -74,8 +74,8 @@ def test_default_settings(app, status, warning):
+         '<li><a href="/en/latest/index.html">Documentation overview</a><ul>',
+ 
+         # resources
+-        _get_css_html_link_tag('en', 'latest', 'alabaster.css'),
+-        _get_css_html_link_tag('en', 'latest', 'pygments.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'alabaster.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'pygments.css'),
+         '<link rel="stylesheet" href="/en/latest/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -145,8 +145,8 @@ def test_urls_prefix_setting(app, status, warning):
+         '<img class="logo" src="/language/version/_static/logo.svg" alt="Logo"/>',
+ 
+         # resources
+-        _get_css_html_link_tag('language', 'version', 'alabaster.css'),
+-        _get_css_html_link_tag('language', 'version', 'pygments.css'),
++        _get_css_html_link_tag(app, 'language', 'version', 'alabaster.css'),
++        _get_css_html_link_tag(app, 'language', 'version', 'pygments.css'),
+         '<link rel="stylesheet" href="/language/version/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -183,8 +183,8 @@ def test_urls_prefix_setting_none(app, status, warning):
+         '<img class="logo" src="/_static/logo.svg" alt="Logo"/>',
+ 
+         # resources
+-        _get_css_html_link_tag('', '', 'alabaster.css'),
+-        _get_css_html_link_tag('', '', 'pygments.css'),
++        _get_css_html_link_tag(app, '', '', 'alabaster.css'),
++        _get_css_html_link_tag(app, '', '', 'pygments.css'),
+         '<link rel="stylesheet" href="/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -247,8 +247,8 @@ def test_custom_404_rst_source(app, status, warning):
+         '<li><a href="/en/latest/index.html">Documentation overview</a><ul>',
+ 
+         # resources
+-        _get_css_html_link_tag('en', 'latest', 'alabaster.css'),
+-        _get_css_html_link_tag('en', 'latest', 'pygments.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'alabaster.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'pygments.css'),
+         '<link rel="stylesheet" href="/en/latest/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -350,8 +350,8 @@ def test_urls_for_dirhtml_builder(app, status, warning):
+         '<li class="toctree-l1"><a class="reference internal" href="/en/latest/chapter/">Chapter</a></li>',
+ 
+         # resources
+-        _get_css_html_link_tag('en', 'latest', 'alabaster.css'),
+-        _get_css_html_link_tag('en', 'latest', 'pygments.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'alabaster.css'),
++        _get_css_html_link_tag(app, 'en', 'latest', 'pygments.css'),
+         '<link rel="stylesheet" href="/en/latest/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -369,13 +369,13 @@ def test_sphinx_resource_urls(app, status, warning):
+ 
+     chunks = [
+         # Sphinx's resources URLs
+-        _get_js_html_link_tag('en', 'latest', 'doctools.js'),
++        _get_js_html_link_tag(app, 'en', 'latest', 'doctools.js'),
+     ]
+ 
+     if sphinx.version_info < (6, 0):
+         chunks.extend([
+-            _get_js_html_link_tag('en', 'latest', 'underscore.js'),
+-            _get_js_html_link_tag('en', 'latest', 'jquery.js'),
++            _get_js_html_link_tag(app, 'en', 'latest', 'underscore.js'),
++            _get_js_html_link_tag(app, 'en', 'latest', 'jquery.js'),
+         ])
+ 
+     for chunk in chunks:
+@@ -401,8 +401,8 @@ def test_toctree_urls_notfound_default(app, status, warning):
+         '<li class="toctree-l1"><a class="reference internal" href="/ja/default/chapter.html">Chapter</a></li>',
+ 
+         # resources
+-        _get_css_html_link_tag('ja', 'default', 'alabaster.css'),
+-        _get_css_html_link_tag('ja', 'default', 'pygments.css'),
++        _get_css_html_link_tag(app, 'ja', 'default', 'alabaster.css'),
++        _get_css_html_link_tag(app, 'ja', 'default', 'pygments.css'),
+         '<link rel="stylesheet" href="/ja/default/_static/custom.css" type="text/css" />',
+     ]
+ 
+@@ -469,7 +469,7 @@ def test_resources_from_extension(app, status, warning):
+     chunks = [
+         '<link rel="stylesheet" type="text/css" href="/en/latest/_static/css_added_by_extension.css" />',
+         '<link rel="stylesheet" type="text/css" href="/en/latest/_static/css_added_by_extension.css" />',
+-        _get_js_html_link_tag('en', 'latest', 'js_added_by_extension.js'),
++        _get_js_html_link_tag(app, 'en', 'latest', 'js_added_by_extension.js'),
+     ]
+ 
+     for chunk in chunks:
+diff --git a/tests/utils.py b/tests/utils.py
+index bbc0af6..a25cba0 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -1,7 +1,7 @@
+ import sphinx
+ 
+ 
+-def _get_css_html_link_tag(language, version, filename):
++def _get_css_html_link_tag(app, language, version, filename):
+     if not language and not version:
+         href = '/_static/{filename}'.format(filename=filename)
+     else:
+@@ -13,18 +13,15 @@ def _get_css_html_link_tag(language, version, filename):
+ 
+     if sphinx.version_info >= (7, 1):
+         # it requires `?v={hash}`
+-        hashes = {
+-            "pygments.css": "4f649999",
+-            "alabaster.css": "039e1c02",
+-        }
+-        filehash = hashes.get(filename)
++        from sphinx.builders.html._assets import _file_checksum
++        filehash = _file_checksum(app.outdir / "_static", filename)
+         if filehash:
+             href = f"{href}?v={filehash}"
+ 
+     return '<link rel="stylesheet" type="text/css" href="{href}" />'.format(href=href)
+ 
+ 
+-def _get_js_html_link_tag(language, version, filename):
++def _get_js_html_link_tag(app, language, version, filename):
+     if not language and not version:
+         src = '/_static/{filename}'.format(filename=filename)
+     else:
+@@ -36,12 +33,8 @@ def _get_js_html_link_tag(language, version, filename):
+ 
+     if sphinx.version_info >= (7, 1):
+         # it requires `?v={hash}`
+-        hashes = {
+-            "documentation_options.js": "5929fcd5",
+-            "doctools.js": "888ff710",
+-            "sphinx_highlight.js": "dc90522c",
+-        }
+-        filehash = hashes.get(filename)
++        from sphinx.builders.html._assets import _file_checksum
++        filehash = _file_checksum(app.outdir / "_static", filename)
+         if filehash:
+             src = f"{src}?v={filehash}"
+ 
