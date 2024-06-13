@@ -1,0 +1,3 @@
+Test-Command: PYTHONPATH=. pytest -v
+Depends: @, python3-pytest, python3-sphinx
+Restrictions: allow-stderr
